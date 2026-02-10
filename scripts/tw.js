@@ -1,8 +1,5 @@
 // Hungarian translation provided by =Krumpli=
 
-console.log('[TW] gist loaded', location.href);
-alert('loaded'); // tijdelijk, daarna weghalen
-
 ScriptAPI.register('FarmGod', true, 'Warre', 'nl.tribalwars@coma.innogames.de');
 
 window.FarmGod = {};
