@@ -1017,6 +1017,19 @@ window.FarmGod.Main = (function (Library, Translation) {
                     data.commands[el.coord] = [];
                 }
 
+                if (el.coord === '566|656') {
+    console.log('--- DEBUG 566|656 ---');
+    console.log('origin:', prop);
+    console.log('distance:', distance, 'optionDistance:', optionDistance);
+    console.log('template_name:', template_name, 'template_units_len:', template.units.length);
+    console.log('unitsLeft ok?:', !!unitsLeft, 'unitsLeft:', unitsLeft);
+    console.log('arrival:', arrival, 'maxTimeDiff:', maxTimeDiff);
+    console.log('commands for target:', data.commands[el.coord]);
+    console.log('farmIndex:', farmIndex);
+    console.log('timeDiff:', timeDiff);
+}
+
+
                 if (unitsLeft && timeDiff && distance < optionDistance) {
                     plan.counter++;
                     if (!plan.farms.hasOwnProperty(prop)) plan.farms[prop] = [];
