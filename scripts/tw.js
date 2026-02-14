@@ -999,9 +999,6 @@ window.FarmGod.Main = (function (Library, Translation) {
                 
                 if (data.commands.hasOwnProperty(el.coord)) {
                     data.commands[el.coord].forEach((timestamp) => {
-                        // negeer attacks die al in het verleden liggen
-                        if (timestamp < now) return;
-                
                         if (Math.abs(timestamp - arrival) < maxTimeDiff) {
                             timeDiff = false;
                         }
