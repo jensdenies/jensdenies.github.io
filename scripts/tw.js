@@ -608,12 +608,7 @@ window.FarmGod.Main = (function (Library, Translation) {
                   <tr><td>${t.options.maxloot
                 }</td><td><input type="checkbox" class="optionMaxloot" ${options.optionMaxloot ? 'checked' : ''
                 }></td></tr>
-                  ${game_data.market != 'nl'
-                    ? `<tr><td>${t.options.newbarbs
-                    }</td><td><input type="checkbox" class="optionNewbarbs" ${options.optionNewbarbs ? 'checked' : ''
-                    }></td></tr>`
-                    : ''
-                }
+                <tr><td>${t.options.newbarbs}</td><td><input type="checkbox" class="optionNewbarbs" ${options.optionNewbarbs ? 'checked' : ''}></td></tr>
                 </table></div><br><input type="button" class="btn optionButton" value="${t.options.button
                 }"></div>`;
             }
@@ -648,9 +643,7 @@ window.FarmGod.Main = (function (Library, Translation) {
 
         if (!$.isEmptyObject(plan)) {
             for (let prop in plan) {
-                if (game_data.market != 'nl') {
-                    html += `<tr><td colspan="4" style="background: #e7d098;"><input type="button" class="btn switchVillage" data-id="${plan[prop][0].origin.id}" value="${t.table.goTo} ${plan[prop][0].origin.name} (${plan[prop][0].origin.coord})" style="float:right;"></td></tr>`;
-                }
+                html += `<tr><td colspan="4" style="background: #e7d098;"><input type="button" class="btn switchVillage" data-id="${plan[prop][0].origin.id}" value="${t.table.goTo} ${plan[prop][0].origin.name} (${plan[prop][0].origin.coord})" style="float:right;"></td></tr>`;
 
                 plan[prop].forEach((val, i) => {
                     html += `<tr class="farmRow row_${i % 2 == 0 ? 'a' : 'b'}">
@@ -777,7 +770,6 @@ window.FarmGod.Main = (function (Library, Translation) {
                     });
             }
 
-            console.log('villages', data.villages);
             return data;
         };
 
@@ -1016,19 +1008,6 @@ window.FarmGod.Main = (function (Library, Translation) {
                 } else {
                     data.commands[el.coord] = [];
                 }
-
-                if (el.coord === '566|656') {
-    console.log('--- DEBUG 566|656 ---');
-    console.log('origin:', prop);
-    console.log('distance:', distance, 'optionDistance:', optionDistance);
-    console.log('template_name:', template_name, 'template_units_len:', template.units.length);
-    console.log('unitsLeft ok?:', !!unitsLeft, 'unitsLeft:', unitsLeft);
-    console.log('arrival:', arrival, 'maxTimeDiff:', maxTimeDiff);
-    console.log('commands for target:', data.commands[el.coord]);
-    console.log('farmIndex:', farmIndex);
-    console.log('timeDiff:', timeDiff);
-}
-
 
                 if (unitsLeft && timeDiff && distance < optionDistance) {
                     plan.counter++;
