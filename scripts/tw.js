@@ -608,7 +608,7 @@ window.FarmGod.Main = (function (Library, Translation) {
                   <tr><td>${t.options.maxloot
                 }</td><td><input type="checkbox" class="optionMaxloot" ${options.optionMaxloot ? 'checked' : ''
                 }></td></tr>
-                  ${game_data.market == 'nl'
+                  ${game_data.market != 'nl'
                     ? `<tr><td>${t.options.newbarbs
                     }</td><td><input type="checkbox" class="optionNewbarbs" ${options.optionNewbarbs ? 'checked' : ''
                     }></td></tr>`
@@ -648,7 +648,7 @@ window.FarmGod.Main = (function (Library, Translation) {
 
         if (!$.isEmptyObject(plan)) {
             for (let prop in plan) {
-                if (game_data.market == 'nl') {
+                if (game_data.market != 'nl') {
                     html += `<tr><td colspan="4" style="background: #e7d098;"><input type="button" class="btn switchVillage" data-id="${plan[prop][0].origin.id}" value="${t.table.goTo} ${plan[prop][0].origin.name} (${plan[prop][0].origin.coord})" style="float:right;"></td></tr>`;
                 }
 
