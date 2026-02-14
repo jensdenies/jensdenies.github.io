@@ -173,22 +173,23 @@ window.FarmGod.Library = (function () {
         // The old version did not count the number of pages in the loot assistant properly when there were more than 15 or so due to the way the UI changes to not show all pages
         // let navLength = ($html.find('#am_widget_Farm').length > 0) ? $html.find('#plunder_list_nav').first().find('a.paged-nav-item').length : ((navSelect.length > 0) ? navSelect.find('option').length - 1 : $html.find('.paged-nav-item').not('[href*="page=-1"]').length);
         let navLength =
-            $html.find('#am_widget_Farm').length > 0
-                ? parseInt(
-                $('#plunder_list_nav')
-                    .first()
-                    .find('a.paged-nav-item, strong.paged-nav-item')
-                    [
-                $('#plunder_list_nav')
-                    .first()
-                    .find(
-                        'a.paged-nav-item, strong.paged-nav-item'
-                    ).length - 1
-                    ].textContent.replace(/\D/g, '')
-            ) - 1
-                : navSelect.length > 0
-                    ? navSelect.find('option').length - 1
-                    : $html.find('.paged-nav-item').not('[href*="page=-1"]').length;
+    $html.find('#am_widget_Farm').length > 0
+        ? parseInt(
+              $html
+                  .find('#plunder_list_nav')
+                  .first()
+                  .find('a.paged-nav-item, strong.paged-nav-item')[
+                      $html
+                          .find('#plunder_list_nav')
+                          .first()
+                          .find('a.paged-nav-item, strong.paged-nav-item')
+                          .length - 1
+                  ].textContent.replace(/\D/g, '')
+          ) - 1
+        : navSelect.length > 0
+        ? navSelect.find('option').length - 1
+        : $html.find('.paged-nav-item').not('[href*="page=-1"]').length;
+
         let pageSize =
             $('#mobileHeader').length > 0
                 ? 10
@@ -826,40 +827,49 @@ window.FarmGod.Main = (function (Library, Translation) {
                                 .first()
                                 .attr('class')
                                 .match(/farm_icon_(.*)\s/)[1]
-                            ] = {
-                            id: $el
-                                .find(
-                                    'input[type="hidden"][name*="template"][name*="[id]"]'
-                                )
+                        ] = (function () {
+                            const templateId = $el
+                                .find('input[type="hidden"][name*="template"][name*="[id]"]')
                                 .first()
                                 .val()
-                                .toNumber(),
-                            units: $el
-                                .find(
-                                    'input[type="text"], input[type="number"]'
-                                )
-                                .map((index, element) => {
-                                    return $(element).val().toNumber();
-                                })
-                                .get(),
-                            speed: Math.max(
+                                .toNumber();
+                        
+                            // Zorg dat template.units dezelfde unit-index-set gebruikt als villages.units
+                            const skipUnits = ['ram', 'catapult', 'knight', 'snob', 'militia'];
+                        
+                            // Alle template inputs in dezelfde volgorde als game_data.units
+                            const allUnits = $el
+                                .find('input[type="text"], input[type="number"]')
+                                .map((index, element) => $(element).val().toNumber())
+                                .get();
+                        
+                            // Filter exact dezelfde units eruit als bij villagesProcessor
+                            const filteredUnits = allUnits.filter((_, idx) => {
+                                const unitName = game_data.units[idx];
+                                return skipUnits.indexOf(unitName) === -1;
+                            });
+                        
+                            const speed = Math.max(
                                 ...$el
-                                    .find(
-                                        'input[type="text"], input[type="number"]'
-                                    )
+                                    .find('input[type="text"], input[type="number"]')
                                     .map((index, element) => {
-                                        return $(element).val().toNumber() > 0
-                                            ? unitSpeeds[
-                                                $(element)
-                                                    .attr('name')
-                                                    .trim()
-                                                    .split('[')[0]
-                                                ]
-                                            : 0;
+                                        // speed bepalen op basis van unitName (uit input name)
+                                        const val = $(element).val().toNumber();
+                                        if (val <= 0) return 0;
+                        
+                                        const unitName = $(element).attr('name').trim().split('[')[0];
+                                        return unitSpeeds[unitName] || 0;
                                     })
                                     .get()
-                            ),
-                        });
+                            );
+                        
+                            return {
+                                id: templateId,
+                                units: filteredUnits,
+                                speed: speed,
+                            };
+                        })());
+
                     });
             }
 
