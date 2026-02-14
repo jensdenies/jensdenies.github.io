@@ -990,20 +990,21 @@ window.FarmGod.Main = (function (Library, Translation) {
                 let distance = lib.getDistance(prop, el.coord);
                 let arrival = Math.round(
                     serverTime +
-                    distance * template.speed * 60 +
-                    Math.round(plan.counter / 5)
+                    distance * template.speed * 60
                 );
+
                 let maxTimeDiff = Math.round(optionTime * 60);
                 let timeDiff = true;
+                const now = Math.round(lib.getCurrentServerTime() / 1000);
+                
                 if (data.commands.hasOwnProperty(el.coord)) {
-                    if (
-                        !farmIndex.hasOwnProperty('color') &&
-                        data.commands[el.coord].length > 0
-                    )
-                        timeDiff = false;
                     data.commands[el.coord].forEach((timestamp) => {
-                        if (Math.abs(timestamp - arrival) < maxTimeDiff)
+                        // negeer attacks die al in het verleden liggen
+                        if (timestamp < now) return;
+                
+                        if (Math.abs(timestamp - arrival) < maxTimeDiff) {
                             timeDiff = false;
+                        }
                     });
                 } else {
                     data.commands[el.coord] = [];
