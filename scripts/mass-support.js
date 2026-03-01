@@ -13,7 +13,29 @@ if(!url.includes("screen=place&mode=call"))
     window.location.href=game_data.link_base_pure+"place&mode=call"
 }
 
+function getColorDarker(hexInput, percent) {
+    let hex = hexInput;
 
+    // strip the leading # if it's there
+    hex = hex.replace(/^\s*#|\s*$/g, "");
+
+    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+    if (hex.length === 3) {
+        hex = hex.replace(/(.)/g, "$1$1");
+    }
+
+    let r = parseInt(hex.substr(0, 2), 16);
+    let g = parseInt(hex.substr(2, 2), 16);
+    let b = parseInt(hex.substr(4, 2), 16);
+
+    const calculatedPercent = (100 + percent) / 100;
+
+    r = Math.round(Math.min(255, Math.max(0, r * calculatedPercent)));
+    g = Math.round(Math.min(255, Math.max(0, g * calculatedPercent)));
+    b = Math.round(Math.min(255, Math.max(0, b * calculatedPercent)));
+
+    return `#${("00"+r.toString(16)).slice(-2).toUpperCase()}${("00"+g.toString(16)).slice(-2).toUpperCase()}${("00"+b.toString(16)).slice(-2).toUpperCase()}`
+}
 
 var units=game_data.units;
 var unitsLength=units.length;
@@ -487,31 +509,6 @@ function addCssStyle(){
 
 }
 addCssStyle()
-
-function getColorDarker(hexInput, percent) {
-    let hex = hexInput;
-
-    // strip the leading # if it's there
-    hex = hex.replace(/^\s*#|\s*$/g, "");
-
-    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-    if (hex.length === 3) {
-        hex = hex.replace(/(.)/g, "$1$1");
-    }
-
-    let r = parseInt(hex.substr(0, 2), 16);
-    let g = parseInt(hex.substr(2, 2), 16);
-    let b = parseInt(hex.substr(4, 2), 16);
-
-    const calculatedPercent = (100 + percent) / 100;
-
-    r = Math.round(Math.min(255, Math.max(0, r * calculatedPercent)));
-    g = Math.round(Math.min(255, Math.max(0, g * calculatedPercent)));
-    b = Math.round(Math.min(255, Math.max(0, b * calculatedPercent)));
-
-    return `#${("00"+r.toString(16)).slice(-2).toUpperCase()}${("00"+g.toString(16)).slice(-2).toUpperCase()}${("00"+b.toString(16)).slice(-2).toUpperCase()}`
-}
-
 
 function invertColor(hex) {
     if (hex.indexOf('#') === 0) {
